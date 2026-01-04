@@ -3,38 +3,39 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { baseUrl } from '../Api';
 
 export default function Add() {
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     amount: 0,
     category: "",
   });
-  const [isLoading,setIsLoading]=useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // console.log(formData);
-  const handleSubmit =async () => {
+  const handleSubmit = async () => {
     // console.log(formData);
     setIsLoading(true);
     try {
-      const res=await axios.post(`http://localhost:7000/api/expense/insert`,
+      const res = await axios.post(`${baseUrl}/api/expense/insert`,
         formData
       );
       // console.log(res);
       if (res.data.success) {
         toast(res.data.message);
-        setTimeout(()=>{
+        setTimeout(() => {
           navigate("/");
-        },2000);
-      }else{
+        }, 2000);
+      } else {
         toast(res.data.message);
       }
     } catch (error) {
       console.log(error);
-    }finally{
-      setTimeout(()=>{
-         setIsLoading(false);
-      },2000);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     }
   };
   return (
@@ -48,15 +49,15 @@ export default function Add() {
       }}>
         <Paper sx={{ width: '70%', p: 3 }}>
           <TextField
-          value={formData.title}
-           fullWidth
+            value={formData.title}
+            fullWidth
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             label="Enter expense title"
             placeholder='Enter expense title here'
             sx={{ mb: 2 }} />
           <TextField
-          value={formData.amount}
-           fullWidth
+            value={formData.amount}
+            fullWidth
             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
             label="Enter expense amount"
             placeholder='Enter amount here'
@@ -65,7 +66,7 @@ export default function Add() {
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Select expense category</InputLabel>
             <Select
-            value={formData.category}
+              value={formData.category}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               // value={age}
@@ -81,7 +82,7 @@ export default function Add() {
             </Select>
           </FormControl>
           <Button onClick={handleSubmit}
-            sx={{ mb: 1 }} variant="contained" fullWidth 
+            sx={{ mb: 1 }} variant="contained" fullWidth
             loading={isLoading}>Submit</Button>
           <Button component={Link} to={"/"} sx={{ mb: 1 }} variant="outlined" color="secondary" fullWidth>View detail</Button>
         </Paper>
